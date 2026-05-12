@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Order {
     private String clientName;
 
     @CreationTimestamp
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
     //TODO decirle a fogar que agregue atributos
     private LocalTime deliveredAt = LocalTime.now();

@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()   // único endpoint público
+                        .requestMatchers("/auth/login", "/auth/logout").permitAll()
                         .requestMatchers("/pizza/traer").permitAll()
                         .requestMatchers("/pedido/traer").permitAll()
                         .anyRequest().authenticated()

@@ -37,13 +37,13 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
     
-    @PatchMapping("/editar/listo")
+    @PatchMapping("/editar/listo/{id}")
     public ResponseEntity<?> editOrderReady(@PathVariable Long id){
         orderService.ready(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     
-    @PatchMapping("/editar/facturado")
+    @PatchMapping("/editar/facturado/{id}")
     public ResponseEntity<?> editOrderInvoiced(@PathVariable Long id){
         orderService.invoiced(id);
         return ResponseEntity.status(HttpStatus.OK).build();

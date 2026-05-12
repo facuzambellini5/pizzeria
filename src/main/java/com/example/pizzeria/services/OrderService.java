@@ -23,6 +23,8 @@ public class OrderService {
     private IOrderRepository orderRepo;
     @Autowired
     private IPizzaRepository pizzaRepo;
+    @Autowired
+    private InvoiceService invoiceService;
 
     @PreAuthorize("hasRole('MANAGER')")
     public OrderResponseDto saveOrder(OrderDto orderDto){
@@ -89,7 +91,12 @@ public class OrderService {
     public void ready(long id_pedido){
         Order order = orderRepo.findById(id_pedido)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
-        order.setStatus(OrderStatus.READY);
+
+
+        if (order.getStatus().equals(OrderStatus.PENDING)){
+            order.setStatus(OrderStatus.READY);
+        } else throw new RuntimeException("Order is not pending, cannot be marked as ready");
+
         orderRepo.save(order);
     }
     
@@ -98,7 +105,13 @@ public class OrderService {
     public void invoiced(long id_pedido){
         Order order = orderRepo.findById(id_pedido)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
-        order.setStatus(OrderStatus.INVOICED);
+
+        invoiceService.createInvoice(id_pedido);
+
+        if (order.getStatus().equals(OrderStatus.READY)) {
+            order.setStatus(OrderStatus.INVOICED);
+        } else throw new RuntimeException("Order is not ready, cannot be marked as invoiced");
+
         order.setDeliveredAt(LocalTime.now());
         orderRepo.save(order);
     }
