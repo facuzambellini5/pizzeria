@@ -25,7 +25,7 @@ public class Order {
     private LocalDate orderDate;
 
     //TODO decirle a fogar que agregue atributos
-    private LocalTime deliveredAt;
+    private LocalTime deliveredAt = LocalTime.now();
     private int timeEstimated; // en minutos
 
     @Enumerated(EnumType.STRING)
