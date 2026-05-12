@@ -3,6 +3,7 @@ package com.example.pizzeria.dtos;
 import com.example.pizzeria.enums.PizzaSize;
 import com.example.pizzeria.enums.CookingType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 public record PizzaDto(
 
@@ -14,7 +15,7 @@ public record PizzaDto(
         String description,
         @NotBlank(message = "El tamaño de la pizza no puede estar vacío")
         PizzaSize size,
-        @NotBlank(message = "El precio de la pizza no puede estar vacío")
+        @Positive(message = "El precio de la pizza debe ser un número positivo")
         double price
 ) {
 }

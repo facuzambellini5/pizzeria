@@ -15,8 +15,9 @@ public class Invoice {
     private Long idInvoice;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime issuedAt;
 
     @OneToOne
+    @JoinColumn(name = "order_id", unique = true, nullable = false)
     private Order order;
 }

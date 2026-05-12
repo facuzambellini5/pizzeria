@@ -1,8 +1,10 @@
 package com.example.pizzeria.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "pizza_pedido")
 public class PizzaOrder {
 
@@ -14,11 +16,11 @@ public class PizzaOrder {
     private double unitPrice;
 
     @ManyToOne
+    @JoinColumn(name = "pizza_id", nullable = false)
     private Pizza pizza;
 
-    //relacion con order
-
     @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
 

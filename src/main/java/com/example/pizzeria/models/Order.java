@@ -31,7 +31,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.PENDING;
 
-    @OneToMany(mappedBy = "order")
+    //TODO ver cascade si es necesario
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PizzaOrder> items = new ArrayList<>();
 
 
