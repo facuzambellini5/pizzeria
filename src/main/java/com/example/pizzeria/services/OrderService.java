@@ -11,6 +11,7 @@ import com.example.pizzeria.repositories.IOrderRepository;
 import com.example.pizzeria.repositories.IPizzaRepository;
 import java.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class OrderService {
     @Autowired
     private IPizzaRepository pizzaRepo;
 
+    @PreAuthorize("hasRole('MANAGER')")
     public OrderResponseDto saveOrder(OrderDto orderDto){
 
         Order order = new Order();
@@ -46,6 +48,7 @@ public class OrderService {
         return new OrderResponseDto(orderRepo.save(order));
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     public OrderResponseDto updateOrder(Long id, OrderDto orderDto){
 
         Order order = orderRepo.findById(id)
@@ -72,6 +75,7 @@ public class OrderService {
         return new OrderResponseDto(orderRepo.save(order));
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     public void deleteOrder(Long id){
         orderRepo.deleteById(id);
     }
@@ -81,6 +85,7 @@ public class OrderService {
     }
 
     //Método marcar como listo
+    @PreAuthorize("hasRole('COOKER')")
     public void ready(long id_pedido){
         Order order = orderRepo.findById(id_pedido)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
@@ -89,6 +94,7 @@ public class OrderService {
     }
     
     //Método marcar como facturado
+    @PreAuthorize("hasRole('MANAGER')")
     public void invoiced(long id_pedido){
         Order order = orderRepo.findById(id_pedido)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));

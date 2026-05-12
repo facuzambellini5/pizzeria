@@ -10,3 +10,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+#activar logs de spring security
+logging:
+  level:
+    org.springframework.security: DEBUG
