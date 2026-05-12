@@ -3,15 +3,18 @@ package com.example.pizzeria.services;
 import com.example.pizzeria.dtos.OrderDto;
 import com.example.pizzeria.dtos.OrderItemDto;
 import com.example.pizzeria.dtos.OrderResponseDto;
+import com.example.pizzeria.enums.OrderStatus;
 import com.example.pizzeria.models.Order;
 import com.example.pizzeria.models.Pizza;
 import com.example.pizzeria.models.PizzaOrder;
 import com.example.pizzeria.repositories.IOrderRepository;
 import com.example.pizzeria.repositories.IPizzaRepository;
+import java.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 
 @Service
@@ -80,7 +83,19 @@ public class OrderService {
     }
 
     //Método marcar como listo
-
+    public void ready(long id_pedido){
+        Order order = orderRepo.findById(id_pedido)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
+        order.setStatus(OrderStatus.READY);
+        orderRepo.save(order);
+    }
+    
     //Método marcar como facturado
-
+    public void invoiced(long id_pedido){
+        Order order = orderRepo.findById(id_pedido)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
+        order.setStatus(OrderStatus.INVOICED);
+        order.setDeliveredAt(LocalTime.now());
+        orderRepo.save(order);
+    }
 }
