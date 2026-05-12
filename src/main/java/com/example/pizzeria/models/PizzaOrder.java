@@ -1,5 +1,6 @@
 package com.example.pizzeria.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,8 +22,6 @@ public class PizzaOrder {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonIgnore
     private Order order;
-
-
-
 }
