@@ -24,7 +24,6 @@ public class OrderController {
     public ResponseEntity<?> editOrder(@PathVariable Long id,
                                        @RequestBody OrderDto orderDto) {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOrder(id, orderDto));
-
     }
 
     @DeleteMapping("/eliminar/{id}")
@@ -37,5 +36,16 @@ public class OrderController {
     public ResponseEntity<?> getOrders(){
         return ResponseEntity.ok(orderService.getAllOrders());
     }
+    
+    @PatchMapping("/editar/listo")
+    public ResponseEntity<?> editOrderReady(@PathVariable Long id){
+        orderService.ready(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    
+    @PatchMapping("/editar/facturado")
+    public ResponseEntity<?> editOrderInvoiced(@PathVariable Long id){
+        orderService.invoiced(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
-
