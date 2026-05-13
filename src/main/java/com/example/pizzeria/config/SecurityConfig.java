@@ -1,5 +1,6 @@
 package com.example.pizzeria.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,19 +28,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())           // API REST, no necesita CSRF
-
+                .csrf(csrf -> csrf.disable())
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Acceso denegado: " + authException.getMessage());
+                        }))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/logout").permitAll()
+                        // AGREGAR "/" y "/error" AQUÍ
+                        .requestMatchers("/", "/error", "/auth/login", "/auth/logout").permitAll()
                         .requestMatchers("/pizza/traer").permitAll()
                         .requestMatchers("/pedido/traer").permitAll()
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable())      // deshabilitamos el form login de HTML
-                .httpBasic(basic -> basic.disable());   // deshabilitamos HTTP Basic
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable());
 
         return http.build();
     }
