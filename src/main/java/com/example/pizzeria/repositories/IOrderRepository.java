@@ -31,6 +31,4 @@ public interface IOrderRepository extends JpaRepository<Order, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
-
-
 }
