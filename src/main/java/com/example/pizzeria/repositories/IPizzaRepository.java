@@ -14,6 +14,7 @@ public interface IPizzaRepository extends JpaRepository<Pizza, Long> {
 
     //TODO implementar método para buscar pizzas por nombre, tamaño y tipo
 
+    List<Pizza> findByActiveTrue();
 
     //Variedades y tipos de pizzas más pedidas por los clientes.
     @Query("SELECT po.pizza.name, po.pizza.cookingType, po.pizza.size, SUM(po.amount) " +

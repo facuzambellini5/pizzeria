@@ -22,7 +22,7 @@
 //    public void init() {
 //        crearUsuarioSiNoExiste("Mostrador", "1234", UserRole.MANAGER);
 //        crearUsuarioSiNoExiste("Dueño", "1234", UserRole.OWNER);
-//        crearUsuarioSiNoExiste("Cocinero", "1234", UserRole.COOKER);
+//        crearUsuarioSiNoExiste("Cocina", "1234", UserRole.COOKER);
 //    }
 //
 //    private void crearUsuarioSiNoExiste(String username, String rawPassword, UserRole role) {

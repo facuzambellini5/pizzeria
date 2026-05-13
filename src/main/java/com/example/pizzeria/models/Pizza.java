@@ -18,6 +18,8 @@ public class Pizza {
 
     private String name;
 
+    private boolean active = true;
+
     @Enumerated(EnumType.STRING)
     private CookingType cookingType;
 

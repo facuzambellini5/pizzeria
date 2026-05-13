@@ -1,6 +1,7 @@
 package com.example.pizzeria.services;
 
 import com.example.pizzeria.dtos.PizzaDto;
+import com.example.pizzeria.exceptions.ResourceNotFoundException;
 import com.example.pizzeria.models.Pizza;
 import com.example.pizzeria.repositories.IPizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class PizzaService {
     @PreAuthorize("hasRole('OWNER')")
     public Pizza editPizza(Long id, PizzaDto pizzaDto) {
 
-        Pizza pizza = pizzaRepo.findById(id).orElseThrow(() -> new RuntimeException("Pizza not found"));
+        Pizza pizza = pizzaRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pizza not found"));
 
         pizza.setName(pizzaDto.name());
         pizza.setCookingType(pizzaDto.cookingType());
@@ -43,12 +44,15 @@ public class PizzaService {
         return pizzaRepo.save(pizza);
     }
 
+    //soft delete
     @PreAuthorize("hasRole('OWNER')")
     public void deletePizza(Long id){
-        pizzaRepo.deleteById(id);
+        Pizza pizza = pizzaRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pizza not found"));
+        pizza.setActive(false);
+        pizzaRepo.save(pizza);
     }
 
     public List<Pizza> getPizzas(){
-        return pizzaRepo.findAll();
+        return pizzaRepo.findByActiveTrue();
     }
 }

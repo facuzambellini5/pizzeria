@@ -2,6 +2,8 @@ package com.example.pizzeria.services;
 
 import com.example.pizzeria.dtos.InvoiceResponseDto;
 import com.example.pizzeria.enums.OrderStatus;
+import com.example.pizzeria.exceptions.BusinessRuleException;
+import com.example.pizzeria.exceptions.ResourceNotFoundException;
 import com.example.pizzeria.models.Invoice;
 import com.example.pizzeria.models.Order;
 import com.example.pizzeria.repositories.IInvoiceRepository;
@@ -23,10 +25,14 @@ public class InvoiceService {
     public void createInvoice(Long idOrder) {
 
         Order order = orderRepo.findById(idOrder)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + idOrder));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + idOrder));
 
         if (order.getStatus() != OrderStatus.READY) {
-            throw new RuntimeException("Order status is not READY");
+            throw new BusinessRuleException("Order status is not READY. Cannot create invoice.");
+        }
+
+        if (invoiceRepo.existsByOrder(order)) {
+            throw new BusinessRuleException("Invoice already exists for this order.");
         }
 
         Invoice invoice = new Invoice();

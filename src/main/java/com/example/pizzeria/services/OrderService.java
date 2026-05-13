@@ -4,6 +4,8 @@ import com.example.pizzeria.dtos.OrderDto;
 import com.example.pizzeria.dtos.OrderItemDto;
 import com.example.pizzeria.dtos.OrderResponseDto;
 import com.example.pizzeria.enums.OrderStatus;
+import com.example.pizzeria.exceptions.BusinessRuleException;
+import com.example.pizzeria.exceptions.ResourceNotFoundException;
 import com.example.pizzeria.models.Order;
 import com.example.pizzeria.models.Pizza;
 import com.example.pizzeria.models.PizzaOrder;
@@ -33,7 +35,11 @@ public class OrderService {
 
         for (OrderItemDto itemDto : orderDto.items()){
             Pizza pizza = pizzaRepo.findById(itemDto.pizzaId())
-                    .orElseThrow(() -> new RuntimeException("Pizza not found with id: " + itemDto.pizzaId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Pizza not found with id: " + itemDto.pizzaId()));
+
+            if (!pizza.isActive()) {
+                throw new BusinessRuleException("Pizza is not active.");
+            }
 
             PizzaOrder pizzaOrder = new PizzaOrder();
             pizzaOrder.setPizza(pizza);
@@ -54,7 +60,7 @@ public class OrderService {
     public OrderResponseDto updateOrder(Long id, OrderDto orderDto){
 
         Order order = orderRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
 
         order.setClientName(orderDto.clientName());
         order.setTimeEstimated(orderDto.timeEstimated());
@@ -64,7 +70,11 @@ public class OrderService {
 
         for (OrderItemDto itemDto : orderDto.items()){
             Pizza pizza = pizzaRepo.findById(itemDto.pizzaId())
-                    .orElseThrow(() -> new RuntimeException("Pizza not found with id: " + itemDto.pizzaId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Pizza not found with id: " + itemDto.pizzaId()));
+
+            if (!pizza.isActive()) {
+                throw new BusinessRuleException("Pizza is not active.");
+            }
 
             PizzaOrder pizzaOrder = new PizzaOrder();
             pizzaOrder.setPizza(pizza);
@@ -90,12 +100,12 @@ public class OrderService {
     @PreAuthorize("hasRole('COOKER')")
     public void ready(long id_pedido){
         Order order = orderRepo.findById(id_pedido)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id_pedido));
 
 
         if (order.getStatus().equals(OrderStatus.PENDING)){
             order.setStatus(OrderStatus.READY);
-        } else throw new RuntimeException("Order is not pending, cannot be marked as ready");
+        } else throw new BusinessRuleException("Order is not pending, cannot be marked as ready");
 
         orderRepo.save(order);
     }
@@ -104,13 +114,13 @@ public class OrderService {
     @PreAuthorize("hasRole('MANAGER')")
     public void invoiced(long id_pedido){
         Order order = orderRepo.findById(id_pedido)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id_pedido));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id_pedido));
 
         invoiceService.createInvoice(id_pedido);
 
         if (order.getStatus().equals(OrderStatus.READY)) {
             order.setStatus(OrderStatus.INVOICED);
-        } else throw new RuntimeException("Order is not ready, cannot be marked as invoiced");
+        } else throw new BusinessRuleException("Order is not ready, cannot be marked as invoiced");
 
         order.setDeliveredAt(LocalTime.now());
         orderRepo.save(order);
