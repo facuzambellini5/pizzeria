@@ -1,5 +1,6 @@
 package com.example.pizzeria.repositories;
 
+import com.example.pizzeria.dtos.StatsDto;
 import com.example.pizzeria.models.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,12 +13,24 @@ import java.time.LocalDateTime;
 public interface IOrderRepository extends JpaRepository<Order, Long> {
 
     // Cantidad de pedidos y monto total en un período de tiempo
-    @Query("SELECT COUNT(DISTINCT o), COALESCE(SUM(po.amount * po.unitPrice), 0) " +
-            "FROM Order o JOIN o.items po " +
-            "WHERE o.orderDate BETWEEN :start AND :end")
-    Object[] getOrderStats(
+    @Query("SELECT new com.example.pizzeria.dtos.StatsDto("+
+    "SUM(po.amount * po.unitPrice)," +
+    "COUNT(DISTINCT i)" +
+    ")   " +
+    "FROM Invoice i JOIN i.order o JOIN o.items po " +
+    "WHERE i.issuedAt BETWEEN :start AND :end")
+    StatsDto getOrderStats(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
+    @Query("SELECT COALESCE(SUM(po.amount * po.unitPrice), 0) " +
+            "FROM Invoice i JOIN i.order o JOIN o.items po " +
+            "WHERE i.issuedAt BETWEEN :start AND :end")
+    double getIncome(
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end
+    );
+
 
 }

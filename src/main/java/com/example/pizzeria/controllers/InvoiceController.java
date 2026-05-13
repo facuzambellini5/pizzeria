@@ -15,11 +15,9 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('OWNER')")
     @GetMapping("/traer")
     public ResponseEntity<?> getInvoices() {
         return ResponseEntity.ok(invoiceService.getInvoices());
     }
-
-
 }

@@ -30,7 +30,6 @@ public class User implements UserDetails{
     @Column(name = "rol", nullable = false)
     private UserRole role;
 
-
     private boolean enabled = true;
 
     @Override

@@ -1,7 +1,7 @@
 package com.example.pizzeria.controllers;
 
+import com.example.pizzeria.repositories.IOrderRepository;
 import com.example.pizzeria.repositories.IPizzaRepository;
-import com.example.pizzeria.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,15 +14,15 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/reportes")
-@PreAuthorize("hasRole('OWNER')")
 public class ReportController {
 
     @Autowired
     private IPizzaRepository pizzaRepo;
     @Autowired
-    private ReportService reportService;
+    private IOrderRepository orderRepo;
 
     // pizzas más pedidas
+    @PreAuthorize("hasRole('OWNER')")
     @GetMapping("/pizzas-mas-pedidas")
     public ResponseEntity<?> getMostOrderedPizzas(
             @RequestParam LocalDateTime start,
@@ -31,18 +31,20 @@ public class ReportController {
     }
 
     // ingresos por período
+    @PreAuthorize("hasRole('OWNER')")
     @GetMapping("/ingresos")
     public ResponseEntity<?> getIncome(
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end) {
-        return ResponseEntity.ok(reportService.getIncome(start, end));
+        return ResponseEntity.ok(orderRepo.getIncome(start, end));
     }
 
-    // pedidos por período
+    // pedidos y monto por período
+    @PreAuthorize("hasRole('OWNER')")
     @GetMapping("/pedidos-por-periodo")
     public ResponseEntity<?> getOrderStats(
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end) {
-        return ResponseEntity.ok(reportService.getOrderStats(start, end));
+        return ResponseEntity.ok(orderRepo.getOrderStats(start, end));
     }
 }
