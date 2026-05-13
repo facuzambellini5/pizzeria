@@ -2,6 +2,7 @@ package com.example.pizzeria.controllers;
 
 import com.example.pizzeria.repositories.IOrderRepository;
 import com.example.pizzeria.repositories.IPizzaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RestController
 @RequestMapping("/reportes")
 public class ReportController {
@@ -27,6 +29,8 @@ public class ReportController {
     public ResponseEntity<?> getMostOrderedPizzas(
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end) {
+
+        log.info("Reporte pizzas más pedidas: desde={} hasta={}", start, end);
         return ResponseEntity.ok(pizzaRepo.findMostOrderedPizzas(start, end));
     }
 
@@ -36,6 +40,8 @@ public class ReportController {
     public ResponseEntity<?> getIncome(
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end) {
+
+        log.info("Reporte ingresos: desde={} hasta={}", start, end);
         return ResponseEntity.ok(orderRepo.getIncome(start, end));
     }
 
@@ -45,6 +51,8 @@ public class ReportController {
     public ResponseEntity<?> getOrderStats(
             @RequestParam LocalDateTime start,
             @RequestParam LocalDateTime end) {
+
+        log.info("Reporte pedidos y recaudación por período: desde={} hasta={}", start, end);
         return ResponseEntity.ok(orderRepo.getOrderStats(start, end));
     }
 }

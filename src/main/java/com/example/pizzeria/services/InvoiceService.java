@@ -8,12 +8,14 @@ import com.example.pizzeria.models.Invoice;
 import com.example.pizzeria.models.Order;
 import com.example.pizzeria.repositories.IInvoiceRepository;
 import com.example.pizzeria.repositories.IOrderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class InvoiceService {
 
@@ -23,6 +25,8 @@ public class InvoiceService {
     private IOrderRepository orderRepo;
 
     public void createInvoice(Long idOrder) {
+
+        log.info("Generando factura para pedido id={}", idOrder);
 
         Order order = orderRepo.findById(idOrder)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + idOrder));

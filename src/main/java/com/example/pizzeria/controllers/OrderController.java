@@ -39,7 +39,7 @@ public class OrderController {
     
     @PatchMapping("/editar/listo/{id}")
     public ResponseEntity<?> editOrderReady(@PathVariable Long id){
-        orderService.ready(id);
+        orderService.setReady(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     

@@ -12,12 +12,15 @@ import com.example.pizzeria.models.PizzaOrder;
 import com.example.pizzeria.repositories.IOrderRepository;
 import com.example.pizzeria.repositories.IPizzaRepository;
 import java.time.LocalTime;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class OrderService {
 
@@ -30,6 +33,9 @@ public class OrderService {
 
     @PreAuthorize("hasRole('MANAGER')")
     public OrderResponseDto saveOrder(OrderDto orderDto){
+
+        log.info("Registrando nuevo pedido: cliente={}, items={}",
+                orderDto.clientName(), orderDto.items().size());
 
         Order order = new Order();
 
@@ -58,6 +64,8 @@ public class OrderService {
 
     @PreAuthorize("hasRole('MANAGER')")
     public OrderResponseDto updateOrder(Long id, OrderDto orderDto){
+
+        log.info("Modificando pedido id={}", id);
 
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
@@ -89,6 +97,7 @@ public class OrderService {
 
     @PreAuthorize("hasRole('MANAGER')")
     public void deleteOrder(Long id){
+        log.info("Eliminando pedido id={}", id);
         orderRepo.deleteById(id);
     }
 
@@ -96,11 +105,14 @@ public class OrderService {
         return orderRepo.findAll().stream().map(OrderResponseDto::new).toList();
     }
 
-    //Método marcar como listo
+    // Marcar como listo
     @PreAuthorize("hasRole('COOKER')")
-    public void ready(long id_pedido){
-        Order order = orderRepo.findById(id_pedido)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id_pedido));
+    public void setReady(long idPedido){
+
+        log.info("Marcando pedido id={} como LISTO", idPedido);
+
+        Order order = orderRepo.findById(idPedido)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + idPedido));
 
 
         if (order.getStatus().equals(OrderStatus.PENDING)){
@@ -112,11 +124,14 @@ public class OrderService {
     
     //Método marcar como facturado
     @PreAuthorize("hasRole('MANAGER')")
-    public void invoiced(long id_pedido){
-        Order order = orderRepo.findById(id_pedido)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id_pedido));
+    public void invoiced(Long idPedido){
 
-        invoiceService.createInvoice(id_pedido);
+        log.info("Iniciando facturación del pedido id={}", idPedido);
+
+        Order order = orderRepo.findById(idPedido)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + idPedido));
+
+        invoiceService.createInvoice(idPedido);
 
         if (order.getStatus().equals(OrderStatus.READY)) {
             order.setStatus(OrderStatus.INVOICED);

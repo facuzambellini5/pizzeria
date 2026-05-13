@@ -14,4 +14,6 @@ spring:
 #activar logs de spring security
 logging:
   level:
-    org.springframework.security: DEBUG
+    com.example.pizzeria: DEBUG        # tus clases → ves todo (INFO + WARN + ERROR + DEBUG)
+    org.springframework.security: WARN # Spring Security → solo warnings, menos ruido
+    org.springframework.web: WARN
