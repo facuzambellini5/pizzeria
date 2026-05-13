@@ -45,7 +45,7 @@ public class OrderController {
     
     @PatchMapping("/editar/facturado/{id}")
     public ResponseEntity<?> editOrderInvoiced(@PathVariable Long id){
-        orderService.invoiced(id);
+        orderService.setInvoiced(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

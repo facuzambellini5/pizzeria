@@ -124,7 +124,7 @@ public class OrderService {
     
     //Método marcar como facturado
     @PreAuthorize("hasRole('MANAGER')")
-    public void invoiced(Long idPedido){
+    public void setInvoiced(Long idPedido){
 
         log.info("Iniciando facturación del pedido id={}", idPedido);
 
