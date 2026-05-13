@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -18,36 +17,27 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "numero")
     private Long id;
 
+    @Column(name = "nombre_cliente", nullable = false, length = 32)
     private String clientName;
 
     @CreationTimestamp
+    @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime orderDate;
 
-    //TODO decirle a fogar que agregue atributos
-    private LocalTime deliveredAt = LocalTime.now();
+    @Column(name = "hora_entrega")
+    private LocalTime deliveredAt;
+
+    @Column(name = "tiempo_estimado")
     private int timeEstimated; // en minutos
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "estado", nullable = false)
     private OrderStatus status = OrderStatus.PENDING;
 
-    //TODO ver cascade si es necesario
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PizzaOrder> items = new ArrayList<>();
-
-
-    //TODO ver si decirle a fogar que agregue atributo en bd
-//    private double total = getTotal();
-//
-//    public double getTotal(){
-//
-//        double total = 0;
-//        for(Pizza pizza : items){
-//            total += pizza.getPrice();
-//        }
-//
-//        return total;
-//    }
 }
 

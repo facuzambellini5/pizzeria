@@ -17,7 +17,7 @@ public class ReportService {
     @Autowired
     private IOrderRepository orderRepo;
 
-    // RF18: ingresos por período
+    // ingresos por período
     public IncomeReportDto getIncome(LocalDateTime start, LocalDateTime end) {
         Object[] stats = invoiceRepo.getIncomeStats(start, end);
         return new IncomeReportDto(
@@ -28,7 +28,7 @@ public class ReportService {
         );
     }
 
-    // RF19: pedidos por período
+    // pedidos por período
     public OrdersReportDto getOrderStats(LocalDateTime start, LocalDateTime end) {
         Object[] stats = orderRepo.getOrderStats(start, end);
         return new OrdersReportDto(

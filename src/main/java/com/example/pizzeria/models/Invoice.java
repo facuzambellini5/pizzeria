@@ -8,13 +8,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Table(name = "factura")
 public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "numero")
     private Long idInvoice;
 
     @CreationTimestamp
+    @Column(name = "emision", nullable = false)
     private LocalDateTime issuedAt;
 
     @OneToOne

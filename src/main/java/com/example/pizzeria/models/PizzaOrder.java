@@ -13,7 +13,10 @@ public class PizzaOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "cantidad", nullable = false)
     private int amount;
+
+    @Column(name = "precio_unit", nullable = false)
     private double unitPrice;
 
     @ManyToOne

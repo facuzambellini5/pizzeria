@@ -13,21 +13,23 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "usuario")
 public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUser;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "nombre_usuario", nullable = false, length = 32)
     private String username;
 
-    @Column(name = "contraseña", nullable = false)
+    @Column(name = "contrasena", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "rol", nullable = false)
     private UserRole role;
+
 
     private boolean enabled = true;
 
