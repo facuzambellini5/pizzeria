@@ -329,4 +329,4 @@ Reports like `getOrderStats()` need aggregated data, not full entity objects. Us
 ## Author
 
 **Facundo González Zambellini**
-[LinkedIn](https://linkedin.com/in/[tu-usuario]) · [GitHub](https://github.com/facuzambellini5)
+[LinkedIn](https://linkedin.com/in/facundo-gonzález-zambellini) · [GitHub](https://github.com/facuzambellini5)
