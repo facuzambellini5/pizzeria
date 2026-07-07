@@ -310,7 +310,7 @@ Flyway will run `V1__rename_tables_and_columnas.sql` automatically on startup to
 ## Key Design Decisions
 
 **Why session-based auth instead of JWT?**
-This is a pizzeria POS — a controlled, internal environment with a single frontend client on the same network. Stateful sessions are simpler to implement correctly and appropriate for this context. For a public API with distributed clients, JWT would be the better choice (as used in [dondeQueda](https://github.com/facuzambellini5)).
+This is a pizzeria POS — a controlled, internal environment with a single frontend client on the same network. Stateful sessions are simpler to implement correctly and appropriate for this context. For a public API with distributed clients, JWT would be the better choice.
 
 **Why is `@PreAuthorize` on the service layer, not the controller?**
 Putting access control in services means the rules travel with the business logic. If a method is ever called from another service (internal call), it's still protected. Controllers that call a protected service method will be blocked regardless of how the call arrived.
