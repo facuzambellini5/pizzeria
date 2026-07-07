@@ -51,24 +51,24 @@ HTTP Request
     │
     ▼
 ┌─────────────────────────────┐
-│         Controllers          │  ← Thin layer: routing & HTTP status only
-│  (AuthController, OrderCtrl, │
-│   PizzaCtrl, InvoiceCtrl,    │
-│   ReportController)          │
+│         Controllers         │  ← Thin layer: routing & HTTP status only
+│  (AuthController, OrderCtrl,│
+│   PizzaCtrl, InvoiceCtrl,   │
+│   ReportController)         │
 └────────────┬────────────────┘
              │
              ▼
 ┌─────────────────────────────┐
-│          Services            │  ← Business logic, @PreAuthorize, state machine
-│  (OrderService, PizzaService,│
-│   InvoiceService)            │
+│          Services           │  ← Business logic, @PreAuthorize, state machine
+│ (OrderService, PizzaService,│
+│   InvoiceService)           │
 └────────────┬────────────────┘
              │
              ▼
 ┌─────────────────────────────┐
-│        Repositories          │  ← JPA interfaces + custom JPQL queries
-│  (IOrderRepository,          │
-│   IPizzaRepository, ...)     │
+│        Repositories         │  ← JPA interfaces + custom JPQL queries
+│  (IOrderRepository,         │
+│   IPizzaRepository, ...)    │
 └────────────┬────────────────┘
              │
              ▼
@@ -111,9 +111,9 @@ Orders flow through three states. Each transition is guarded by both role valida
   [COOKER marks as ready]       [MANAGER marks as invoiced]
          │                               │
          ▼                               ▼
-   ┌─────────┐    PATCH /listo/{id}  ┌───────┐    PATCH /facturado/{id}   ┌──────────┐
-   │ PENDING │ ─────────────────────▶│ READY │ ──────────────────────────▶│ INVOICED │
-   └─────────┘                       └───────┘                             └──────────┘
+   ┌─────────┐    PATCH /listo/{id}  ┌──────┐    PATCH /facturado/{id}    ┌──────────┐
+   │ PENDING │ ────────────────────▶│ READY │ ──────────────────────────▶│ INVOICED │
+   └─────────┘                       └──────┘                             └──────────┘
                                           │
                                           └──▶ Invoice auto-generated
                                                (idempotent: one invoice per order)
@@ -227,7 +227,7 @@ All report endpoints accept `start` and `end` query params as `LocalDateTime` (`
 
 ```
 ┌──────────┐        ┌────────────┐        ┌───────────┐
-│   usuario │        │   pedido   │        │  factura  │
+│  usuario │        │   pedido   │        │  factura  │
 │──────────│        │────────────│        │───────────│
 │ id       │        │ numero     │◀───────│ numero    │
 │ nombre   │        │ nombre_cli │  1:1   │ emision   │
@@ -238,9 +238,9 @@ All report endpoints accept `start` and `end` query params as `LocalDateTime` (`
                           │ 1:N
                           ▼
                    ┌─────────────┐        ┌──────────────┐
-                   │ pizza_pedido │        │    pizza     │
+                   │pizza_pedido │        │    pizza     │
                    │─────────────│        │──────────────│
-                   │ id          │───────▶│ id           │
+                   │ id          │───────▶│ id          │
                    │ cantidad    │  N:1   │ nombre       │
                    │ precio_unit │        │ descripcion  │
                    │ pizza_id    │        │ precio       │
